@@ -8,8 +8,11 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
+from dotenv import load_dotenv
 
-os.environ["OPENAI_API_KEY"] = "sk-proj-rVu4mQJiLX4NX3zwWr23T3BlbkFJCRJJIT9mWOMyAFiDQvVB"
+load_dotenv()  # load all the variables from .env
+
+api_key = os.getenv('OPENAI_API_KEY')
 
 def load_db(file, chain_type, k):
     # load documents
