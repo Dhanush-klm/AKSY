@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "sk-proj-rVu4mQJiLX4NX3zwWr23T3BlbkFJCRJJIT9mWOMyAFiDQvVB"
 
 def load_db(file, chain_type, k):
     # load documents
