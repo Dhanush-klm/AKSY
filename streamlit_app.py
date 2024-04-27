@@ -8,9 +8,9 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
-
 OPENAI_API=st.secrets['OPENAI_API_KEY']
-os.environ["OPENAI_API_KEY"] = OPENAI_API
+os.environ["OPENAI_API_KEY"] = OPENAI_API # Just to verify that it loads correctly; remove or replace in production code
+
 
 
 def load_db(file, chain_type, k):
