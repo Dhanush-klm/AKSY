@@ -42,7 +42,7 @@ class ChatBot:
         self.answer = ""
         self.db_query = ""
         self.db_response = []
-        self.loaded_file = "2024_NCR_GUIDE_NH_VOYIX_HR.pdf"
+        self.loaded_file = "diabetes.pdf"
         self.qa = load_db(self.loaded_file, "stuff", 4)
 
     def load_db(self, count):
