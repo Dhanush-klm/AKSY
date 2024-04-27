@@ -10,7 +10,7 @@ from langchain.document_loaders import PyPDFLoader
 import os
 
 OPENAI_API=st.secrets['OPENAI_API_KEY']
-os.environ["OPEAI_API_KEY"] = OPENAI_API
+os.environ["OPENAI_API_KEY"] = OPENAI_API
 
 
 def load_db(file, chain_type, k):
