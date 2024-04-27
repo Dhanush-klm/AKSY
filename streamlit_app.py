@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
 
-OPENAI_API=st.secrets["OPENAI_API_KEY"]
+OPENAI_API=st.secrets['OPENAI_API_KEY']
 os.environ["OPENAI_API_KEY"] = OPENAI_API
 
 
@@ -42,7 +42,7 @@ class ChatBot:
         self.answer = ""
         self.db_query = ""
         self.db_response = []
-        self.loaded_file = "diabetes.pdf"
+        self.loaded_file = "2024_NCR_GUIDE_NH_VOYIX_HR.pdf"
         self.qa = load_db(self.loaded_file, "stuff", 4)
 
     def load_db(self, count):
@@ -62,8 +62,9 @@ class ChatBot:
             self.db_query = result["generated_question"]
             self.db_response = result["source_documents"]
             self.answer = result['answer']
-            st.write("User: ", query)
-            st.write("ChatBot: ", self.answer)
+            for q, a in self.chat_history:
+                st.write("User: ", q)
+                st.write("ChatBot: ", a)
 
     def clear_history(self, count=0):
         self.chat_history = []
