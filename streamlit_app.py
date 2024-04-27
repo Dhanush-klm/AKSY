@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
 
-OPENAI_API=st.secrets['OPENAI_API_KEY']
+OPENAI_API=st.secrets["OPENAI_API_KEY"]
 os.environ["OPENAI_API_KEY"] = OPENAI_API
 
 
