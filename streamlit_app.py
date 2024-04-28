@@ -8,8 +8,14 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
-OPENAI_API=st.secrets['OPENAI_API_KEY']
-os.environ["OPENAI_API_KEY"] = OPENAI_API # Just to verify that it loads correctly; remove or replace in production code
+from dotenv import load_dotenv
+import tempfile
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Access your API key
+api_key = os.getenv('OPENAI_API_KEY')  # Just to verify that it loads correctly; remove or replace in production code
 
 
 
@@ -34,7 +40,7 @@ def load_db(file, chain_type, k):
         return_source_documents=True,
         return_generated_question=True,
     )
-    return qa
+    return qa,db
 
 class ChatBot:
     def __init__(self):
@@ -42,16 +48,38 @@ class ChatBot:
         self.answer = ""
         self.db_query = ""
         self.db_response = []
-        self.loaded_file = "diabetes.pdf"
-        self.qa = load_db(self.loaded_file, "stuff", 4)
+        self.loaded_file = None  # Initially no file is loaded
+        self.qa = None  # Initially no QA chain is loaded
+        self.db = None  # Store the database instance
 
-    def load_db(self, count):
-        if count == 0 or file_input is None:  # init or no file specified :
+    def load_db(self, file_input=None):
+        if file_input is not None:
+            # Save the uploaded file to a temporary file
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+                tmp.write(file_input.getvalue())
+                tmp_path = tmp.name
+
+            self.loaded_file = tmp_path
+            self.qa, self.db = load_db(self.loaded_file, "stuff", 4)
             st.markdown(f"Loaded File: {self.loaded_file}")
-        else:
-            self.loaded_file = file_input.name
-            self.qa = load_db(self.loaded_file, "stuff", 4)
         self.clear_history()
+
+    def add_document(self, file_input):
+        if file_input is not None and self.db is not None:
+            # Save the uploaded file to a temporary file
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+                tmp.write(file_input.getvalue())
+                tmp_path = tmp.name
+
+            # Load additional documents
+            loader = PyPDFLoader(tmp_path)
+            documents = loader.load()
+            # Split documents
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
+            docs = text_splitter.split_documents(documents)
+            # Update the database with new documents
+            self.db.add_documents(docs)
+            st.markdown(f"Added document: {file_input.name}")
 
     def convchain(self, query):
         if not query:
@@ -69,6 +97,7 @@ class ChatBot:
     def clear_history(self, count=0):
         self.chat_history = []
 
+
 import datetime
 
 current_date = datetime.datetime.now().date()
@@ -76,12 +105,14 @@ llm_name = "gpt-3.5-turbo-0301" if current_date < datetime.date(2023, 9, 2) else
 
 cb = ChatBot()
 
+# Streamlit interface handling for file upload
 file_input = st.file_uploader("Upload File", type=['pdf'])
 button_load = st.button("Load File")
 inp = st.text_input("Enter your question:")
 
-if button_load:
-    cb.load_db(1)
+
+if button_load and file_input:
+    cb.load_db(file_input)
 
 if inp:
     cb.convchain(inp)
