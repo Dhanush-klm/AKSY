@@ -8,7 +8,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
-from dotenv import load_dotenv
 import tempfile
 
 
