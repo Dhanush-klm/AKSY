@@ -4,3 +4,4 @@ pypdf
 langchain
 docarray
 tiktoken
+tempfile
