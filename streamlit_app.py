@@ -42,15 +42,15 @@ class ChatBot:
         self.answer = ""
         self.db_query = ""
         self.db_response = []
-        self.loaded_file = None  # Initially no file is loaded
-        self.qa = None  # Initially no QA chain is loaded
+        self.loaded_file = "diabetes.pdf"
+        self.qa = load_db(self.loaded_file, "stuff", 4)
 
-    def load_db(self, file_input=None):
-        if file_input is not None:
-            # Read the file directly from the uploaded file object
+    def load_db(self, count):
+        if count == 0 or file_input is None:  # init or no file specified :
+            st.markdown(f"Loaded File: {self.loaded_file}")
+        else:
             self.loaded_file = file_input.name
             self.qa = load_db(self.loaded_file, "stuff", 4)
-            st.markdown(f"Loaded File: {self.loaded_file}")
         self.clear_history()
 
     def convchain(self, query):
@@ -69,7 +69,6 @@ class ChatBot:
     def clear_history(self, count=0):
         self.chat_history = []
 
-
 import datetime
 
 current_date = datetime.datetime.now().date()
@@ -77,14 +76,12 @@ llm_name = "gpt-3.5-turbo-0301" if current_date < datetime.date(2023, 9, 2) else
 
 cb = ChatBot()
 
-# Streamlit interface handling for file upload
 file_input = st.file_uploader("Upload File", type=['pdf'])
 button_load = st.button("Load File")
 inp = st.text_input("Enter your question:")
 
-
-if button_load and file_input:
-    cb.load_db(file_input)
+if button_load:
+    cb.load_db(1)
 
 if inp:
     cb.convchain(inp)
