@@ -11,11 +11,9 @@ import os
 from dotenv import load_dotenv
 import tempfile
 
-# Load environment variables from .env file
-load_dotenv()
 
-# Access your API key
-api_key = os.getenv('OPENAI_API_KEY')  # Just to verify that it loads correctly; remove or replace in production code
+OPENAI_API=st.secrets['OPENAI_API_KEY']
+os.environ["OPENAI_API_KEY"] = OPENAI_API # Just to verify that it loads correctly; remove or replace in production code
 
 
 
