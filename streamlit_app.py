@@ -79,21 +79,21 @@ class ChatBot:
             st.markdown(f"Added document: {file_input.name}")
 
     def convchain(self, query):
-    if not self.qa:
-        st.error("The QA model is not loaded. Please load a file first.")
-        return
+        if not self.qa:
+            st.error("The QA model is not loaded. Please load a file first.")
+            return
 
-    if not query:
-        st.write("User: ", "")
-    else:
-        result = self.qa({"question": query, "chat_history": self.chat_history})
-        self.chat_history.extend([(query, result["answer"])])
-        self.db_query = result["generated_question"]
-        self.db_response = result["source_documents"]
-        self.answer = result['answer']
-        for q, a in self.chat_history:
-            st.write("User: ", q)
-            st.write("ChatBot: ", a)
+        if not query:
+            st.write("User: ", "")
+        else:
+            result = self.qa({"question": query, "chat_history": self.chat_history})
+            self.chat_history.extend([(query, result["answer"])])
+            self.db_query = result["generated_question"]
+            self.db_response = result["source_documents"]
+            self.answer = result['answer']
+            for q, a in self.chat_history:
+                st.write("User: ", q)
+                st.write("ChatBot: ", a)
 
 import datetime
 
