@@ -91,9 +91,9 @@ class ChatBot:
             self.db_query = result["generated_question"]
             self.db_response = result["source_documents"]
             self.answer = result['answer']
-            for q, a in self.chat_history:
-                st.write("User: ", q)
-                st.write("ChatBot: ", a)
+        for q, a in self.chat_history:
+            st.write("User: ", q)
+            st.write("ChatBot: ", a)
 
 import datetime
 
