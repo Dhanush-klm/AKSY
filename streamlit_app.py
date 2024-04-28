@@ -8,9 +8,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 import os
-import tempfile
-
-
 OPENAI_API=st.secrets['OPENAI_API_KEY']
 os.environ["OPENAI_API_KEY"] = OPENAI_API # Just to verify that it loads correctly; remove or replace in production code
 
@@ -37,7 +34,7 @@ def load_db(file, chain_type, k):
         return_source_documents=True,
         return_generated_question=True,
     )
-    return qa,db
+    return qa
 
 class ChatBot:
     def __init__(self):
@@ -47,42 +44,16 @@ class ChatBot:
         self.db_response = []
         self.loaded_file = None  # Initially no file is loaded
         self.qa = None  # Initially no QA chain is loaded
-        self.db = None  # Store the database instance
 
     def load_db(self, file_input=None):
         if file_input is not None:
-            # Save the uploaded file to a temporary file
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
-                tmp.write(file_input.getvalue())
-                tmp_path = tmp.name
-
-            self.loaded_file = tmp_path
-            self.qa, self.db = load_db(self.loaded_file, "stuff", 4)
+            # Read the file directly from the uploaded file object
+            self.loaded_file = file_input.name
+            self.qa = load_db(self.loaded_file, "stuff", 4)
             st.markdown(f"Loaded File: {self.loaded_file}")
         self.clear_history()
 
-    def add_document(self, file_input):
-        if file_input is not None and self.db is not None:
-            # Save the uploaded file to a temporary file
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
-                tmp.write(file_input.getvalue())
-                tmp_path = tmp.name
-
-            # Load additional documents
-            loader = PyPDFLoader(tmp_path)
-            documents = loader.load()
-            # Split documents
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
-            docs = text_splitter.split_documents(documents)
-            # Update the database with new documents
-            self.db.add_documents(docs)
-            st.markdown(f"Added document: {file_input.name}")
-
     def convchain(self, query):
-        if not self.qa:
-            st.error("The QA model is not loaded. Please load a file first.")
-            return
-
         if not query:
             st.write("User: ", "")
         else:
@@ -91,9 +62,13 @@ class ChatBot:
             self.db_query = result["generated_question"]
             self.db_response = result["source_documents"]
             self.answer = result['answer']
-        for q, a in self.chat_history:
-            st.write("User: ", q)
-            st.write("ChatBot: ", a)
+            for q, a in self.chat_history:
+                st.write("User: ", q)
+                st.write("ChatBot: ", a)
+
+    def clear_history(self, count=0):
+        self.chat_history = []
+
 
 import datetime
 
