@@ -82,7 +82,7 @@ class ChatBot:
     def clear_history(self):
         self.chat_history = []
 # Streamlit UI
-
+st.title('KLM-Buddy')
 # Assuming the rest of your necessary imports and ChatBot class definition are here
 
 # Initialize the chatbot
