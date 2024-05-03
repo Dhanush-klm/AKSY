@@ -6,18 +6,13 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 import os
-from dotenv import load_dotenv
+import datetime
+import tempfile
 
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Access your API key
-api_key = os.getenv('OPENAI_API_KEY')  # Just to verify that it loads correctly; remove or replace in production code
+api_key = st.secrets["OPENAI_API_KEY"]  # Just to verify that it loads correctly; remove or replace in production code
 
-import datetime
-
-import tempfile
 
 def load_db(file_input, chain_type, k, llm_name):
     # Check if file_input is not None and is a file-like object
