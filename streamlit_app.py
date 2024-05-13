@@ -1,17 +1,15 @@
 import streamlit as st
-from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.document_loaders import PyPDFLoader
 from langchain.chains import ConversationalRetrievalChain
-from langchain.chat_models import ChatOpenAI
 import os
 import datetime
 import tempfile
 
 
 # Access your API key
-api_key = st.secrets["OPENAI_API_KEY"]  # Just to verify that it loads correctly; remove or replace in production code
+api_key = st.secrets["HUGGINGFACE_API_KEY"]  # Just to verify that it loads correctly; remove or replace in production code
 
 
 def load_db(file_input, chain_type, k, llm_name):
