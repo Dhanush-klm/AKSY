@@ -31,6 +31,11 @@ def load_db(file_input, chain_type, k, llm_name):
     docs = text_splitter.split_documents(documents)
 
     embeddings = OpenAIEmbeddings(api_key=api_key)
+    # Check if the number of tokens used is close to the maximum limit
+    if embeddings.get_token_count() >= 1000000:
+        st.warning("You have used close to the maximum limit of 1 million tokens. Please consider upgrading your plan.")
+    else:
+        st.info(f"You have used {embeddings.get_token_count()} tokens.")
     db = DocArrayInMemorySearch.from_documents(docs, embeddings)
 
     retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": k})
