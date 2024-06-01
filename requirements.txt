@@ -6,3 +6,4 @@ docarray
 tiktoken
 langchain-community
 python-dotenv
+unstructured
