@@ -7,3 +7,4 @@ tiktoken
 langchain-community
 python-dotenv
 unstructured
+python-docx
