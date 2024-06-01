@@ -5,3 +5,4 @@ langchain
 docarray
 tiktoken
 langchain-community
+python-dotenv
