@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 # Access your API key
-api_key = os.getenv('OPENAI_API_KEY')  # Just to verify that it loads correctly; remove or replace in production code
+api_key = st.secrets["OPENAI_API_KEY"]  # Just to verify that it loads correctly; remove or replace in production code
 def load_db(file_inputs, chain_type, k, llm_name):
     qas = []
     for file_input in file_inputs:
