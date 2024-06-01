@@ -4,4 +4,4 @@ pypdf
 langchain
 docarray
 tiktoken
-
+langchain-community
